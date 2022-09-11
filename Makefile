@@ -7,7 +7,9 @@ OBJ_DIR = obj
 HEADERS = includes/pipex.h
 
 TARGETS = 	main.c \
-			utils.c
+			utils.c \
+			error.c \
+			commands.c
 
 SRC = $(addprefix ./src/,$(TARGETS)) 
 OBJ = $(addprefix ./$(OBJ_DIR)/,$(TARGETS:.c=.o)) 
