@@ -6,7 +6,7 @@
 /*   By: vivan-de <vivan-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 08:17:31 by vivan-de          #+#    #+#             */
-/*   Updated: 2022/09/11 08:18:44 by vivan-de         ###   ########.fr       */
+/*   Updated: 2022/09/11 08:38:44 by vivan-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void	first_command(char **argv, int pipe_fd[2], char **envp)
 	dup2(pipe_fd[1], STDOUT_FILENO);
 	cmd = ft_split(argv[2], ' ');
 	binary_path = get_binary_path(cmd[0], envp);
+	if (!binary_path)
+		error("Error: command not found\n");
 	execve(binary_path, cmd, envp);
 }
 
@@ -41,5 +43,7 @@ void	second_command(char **argv, int pipe_fd[2], char **envp)
 	dup2(pipe_fd[0], STDIN_FILENO);
 	cmd = ft_split(argv[3], ' ');
 	binary_path = get_binary_path(cmd[0], envp);
+	if (!binary_path)
+		error("Error: command not found\n");
 	execve(binary_path, cmd, envp);
 }
