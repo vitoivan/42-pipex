@@ -1,4 +1,4 @@
-CC = clang
+CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g -c
 LFLAGS = -L. -lft
 NAME = pipex

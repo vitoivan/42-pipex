@@ -6,7 +6,7 @@
 /*   By: vivan-de <vivan-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 17:35:51 by vivan-de          #+#    #+#             */
-/*   Updated: 2022/09/11 10:45:00 by vivan-de         ###   ########.fr       */
+/*   Updated: 2022/09/11 11:51:52 by vivan-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	pipex;
 
-	init_pipex(&pipex, argv, envp);
 	if (argc != 5)
 		error(ft_strjoin("\nError: Wrong number of arguments\n",
 				"Expected: ./pipex file1 cmd1 cmd2 file2\n"), 1);
+	init_pipex(&pipex, argv, envp);
 	init_pipe(pipex.pipe);
 	pipex.pid[0] = fork();
 	if (is_child(pipex.pid[0]))
@@ -61,11 +61,12 @@ int	main(int argc, char **argv, char **envp)
 		{
 			close_pipes(pipex.pipe);
 			waitpid(pipex.pid[0], &pipex.status, 0);
-			if (pipex.status != 0)
-				exit(pipex.status);
+			if (WIFEXITED(pipex.status))
+				pipex.status = WEXITSTATUS(pipex.status);
 			waitpid(pipex.pid[1], &pipex.status, 0);
-			if (pipex.status != 0)
-				exit(pipex.status);
+			if (WIFEXITED(pipex.status))
+				pipex.status = WEXITSTATUS(pipex.status);
+			return (pipex.status);
 		}
 	}
 	return (0);
