@@ -6,44 +6,44 @@
 /*   By: vivan-de <vivan-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 08:17:31 by vivan-de          #+#    #+#             */
-/*   Updated: 2022/09/11 09:48:56 by vivan-de         ###   ########.fr       */
+/*   Updated: 2022/09/11 10:52:58 by vivan-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void	first_command(char **argv, int pipe_fd[2], char **envp)
+void	first_command(t_pipex *pipex, char **envp)
 {
 	char	*binary_path;
 	char	**cmd;
 	int		filein;
 
-	filein = open(argv[1], O_RDONLY);
+	filein = open(pipex->filein, O_RDONLY);
 	if (filein == -1)
-		error(ft_strjoin("Error opening file: ", argv[1]));
+		error(ft_strjoin("Error opening file: ", pipex->filein), 1);
 	dup2(filein, STDIN_FILENO);
-	dup2(pipe_fd[1], STDOUT_FILENO);
-	cmd = ft_split(argv[2], ' ');
+	dup2(pipex->pipe[1], STDOUT_FILENO);
+	cmd = ft_split(pipex->cmd1, ' ');
 	binary_path = get_binary_path(cmd[0], envp);
 	if (!binary_path)
-		error(ft_strjoin("Error: Command not found: ", cmd[0]));
+		error(ft_strjoin("Error: Command not found: ", cmd[0]), 127);
 	execve(binary_path, cmd, envp);
 }
 
-void	second_command(char **argv, int pipe_fd[2], char **envp)
+void	second_command(t_pipex *pipex, char **envp)
 {
 	char	*binary_path;
 	char	**cmd;
 	int		fileout;
 
-	fileout = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fileout = open(pipex->fileout, O_WRONLY | O_CREAT | O_TRUNC, 0664);
 	if (fileout == -1)
-		error(ft_strjoin("Error opening file: ", argv[1]));
+		error(ft_strjoin("Error opening file: ", pipex->fileout), 1);
 	dup2(fileout, STDOUT_FILENO);
-	dup2(pipe_fd[0], STDIN_FILENO);
-	cmd = ft_split(argv[3], ' ');
+	dup2(pipex->pipe[0], STDIN_FILENO);
+	cmd = ft_split(pipex->cmd2, ' ');
 	binary_path = get_binary_path(cmd[0], envp);
 	if (!binary_path)
-		error(ft_strjoin("Error: Command not found: ", cmd[0]));
+		error(ft_strjoin("Error: Command not found: ", cmd[0]), 127);
 	execve(binary_path, cmd, envp);
 }

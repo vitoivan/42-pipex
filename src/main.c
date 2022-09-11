@@ -6,7 +6,7 @@
 /*   By: vivan-de <vivan-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 17:35:51 by vivan-de          #+#    #+#             */
-/*   Updated: 2022/09/11 09:54:29 by vivan-de         ###   ########.fr       */
+/*   Updated: 2022/09/11 10:45:00 by vivan-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static void	init_pipex(t_pipex *pipex, char **argv, char **envp)
 	pipex->filein = argv[1];
 	pipex->fileout = argv[4];
 	pipex->envp = envp;
+	pipex->status = 0;
 }
 
 static void	close_pipes(int pipe_fd[2])
@@ -30,7 +31,7 @@ static void	close_pipes(int pipe_fd[2])
 static void	init_pipe(int pipe_fd[2])
 {
 	if (pipe(pipe_fd) == -1)
-		error("Error creating pipe\n");
+		error("Error creating pipe\n", 1);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -40,13 +41,13 @@ int	main(int argc, char **argv, char **envp)
 	init_pipex(&pipex, argv, envp);
 	if (argc != 5)
 		error(ft_strjoin("\nError: Wrong number of arguments\n",
-				"Expected: ./pipex file1 cmd1 cmd2 file2\n"));
+				"Expected: ./pipex file1 cmd1 cmd2 file2\n"), 1);
 	init_pipe(pipex.pipe);
 	pipex.pid[0] = fork();
 	if (is_child(pipex.pid[0]))
 	{
 		close(pipex.pipe[0]);
-		first_command(argv, pipex.pipe, envp);
+		first_command(&pipex, envp);
 	}
 	else
 	{
@@ -54,10 +55,18 @@ int	main(int argc, char **argv, char **envp)
 		if (is_child(pipex.pid[1]))
 		{
 			close(pipex.pipe[1]);
-			second_command(argv, pipex.pipe, envp);
+			second_command(&pipex, envp);
 		}
 		else
+		{
 			close_pipes(pipex.pipe);
+			waitpid(pipex.pid[0], &pipex.status, 0);
+			if (pipex.status != 0)
+				exit(pipex.status);
+			waitpid(pipex.pid[1], &pipex.status, 0);
+			if (pipex.status != 0)
+				exit(pipex.status);
+		}
 	}
 	return (0);
 }
