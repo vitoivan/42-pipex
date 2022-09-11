@@ -6,7 +6,7 @@
 /*   By: vivan-de <vivan-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 17:35:45 by vivan-de          #+#    #+#             */
-/*   Updated: 2022/09/11 08:29:41 by vivan-de         ###   ########.fr       */
+/*   Updated: 2022/09/11 09:49:15 by vivan-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <fcntl.h>
 # include <string.h>
 # include <unistd.h>
+# include <stdio.h>
+# include <errno.h>
 
 typedef struct s_pipex {
 	char	*cmd1;
@@ -29,7 +31,7 @@ typedef struct s_pipex {
 }	t_pipex;
 
 int		is_child(int pid);
-void	error(const char *message);
+void	error(char *message);
 void	first_command(char **argv, int pipe_fd[2], char **envp);
 void	second_command(char **argv, int pipe_fd[2], char **envp);
 char	**get_path(char **envp);

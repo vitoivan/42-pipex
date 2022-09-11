@@ -6,7 +6,7 @@
 /*   By: vivan-de <vivan-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 17:35:51 by vivan-de          #+#    #+#             */
-/*   Updated: 2022/09/11 08:28:10 by vivan-de         ###   ########.fr       */
+/*   Updated: 2022/09/11 09:51:50 by vivan-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ int	main(int argc, char **argv, char **envp)
 
 	init_pipex(&pipex, argv, envp);
 	if (argc != 5)
-		error("Wrong number of arguments\n"
-			"Expected: ./pipex file1 cmd1 cmd2 file2\n");
+		error(ft_strjoin("\nWrong number of arguments\n",
+				"Expected: ./pipex file1 cmd1 cmd2 file2\n"));
 	init_pipe(pipex.pipe);
 	pipex.pid[0] = fork();
 	if (is_child(pipex.pid[0]))
