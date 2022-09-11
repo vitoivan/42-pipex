@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone.c                                     :+:      :+:    :+:   */
+/*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vivan-de <vivan-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/02 11:58:39 by victor            #+#    #+#             */
-/*   Updated: 2022/09/11 14:28:53 by vivan-de         ###   ########.fr       */
+/*   Created: 2022/09/11 15:58:33 by vivan-de          #+#    #+#             */
+/*   Updated: 2022/09/11 16:00:13 by vivan-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../includes/pipex.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
+void	init_pipex(t_pipex *pipex, char **argv, char **envp)
 {
-	if (lst != NULL)
-	{
-		if (lst->content != NULL)
-			del(lst->content);
-		del(lst->content);
-		free(lst);
-	}
+	pipex->cmd1 = argv[2];
+	pipex->cmd2 = argv[3];
+	pipex->filein = argv[1];
+	pipex->fileout = argv[4];
+	pipex->envp = envp;
+	pipex->status = 0;
 }
