@@ -6,7 +6,7 @@
 /*   By: vivan-de <vivan-de@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/24 17:35:51 by vivan-de          #+#    #+#             */
-/*   Updated: 2022/09/11 16:06:56 by vivan-de         ###   ########.fr       */
+/*   Updated: 2022/09/11 16:17:42 by vivan-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@ static void	validate_args(int argc, char **argv)
 		error(ft_strjoin("Invalid number of arguments\n",
 				"Usage: ./pipex filein cmd1 cmd2 fileout"),
 			1);
-	if (ft_strlen(argv[1]) == 0 || ft_strlen(argv[2]) == 0
+	else if (ft_strlen(argv[1]) == 0 || ft_strlen(argv[2]) == 0
 		|| ft_strlen(argv[3]) == 0 || ft_strlen(argv[4]) == 0)
-		error(ft_strjoin("Invalid arguments\n", ""), 1);
+		error(ft_strjoin("Invalid number of arguments\n",
+				"Usage: ./pipex filein cmd1 cmd2 fileout"),
+			1);
 }
 
 int	main(int argc, char **argv, char **envp)
